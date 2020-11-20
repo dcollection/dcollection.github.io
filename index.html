@@ -91,6 +91,7 @@ output {
 	];
 	var b = document.getElementById('pwd-container');
 	var o = document.getElementById('o');
+	
 
 	report = function(e) {
 		// force
@@ -160,6 +161,7 @@ output {
 	/* Hack to work around new iOS8 behavior where innerHTML counts as a content change - previously, it was safe to use, see http://www.quirksmode.org/blog/archives/2014/02/the_ios_event_c.html */
 	delayedInnerHTML = function(s) {
 		o.innerHTML += JSON.stringify(s);
+		o.scrollTop = o.scrollHeight - o.clientHeight;
 	}
 
 	for (var i=0; i<events.length; i++) {
