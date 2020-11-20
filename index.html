@@ -200,9 +200,9 @@ output {
 		
 		s.type = e.type;
 		
-        s.acceleration = e.acceleration
-        s.accelerationIncludingGravity = e.accelerationIncludingGravity
-        s.rotationRate = e.rotationRate
+        s.acceleration = {"x":e.acceleration.x, "y":e.acceleration.y, "z":e.acceleration.z}
+        s.accelerationIncludingGravity = {"x":e.accelerationIncludingGravity.x, "y":e.accelerationIncludingGravity.y, "z":e.accelerationIncludingGravity.z}
+        s.rotationRate = {"x":e.rotationRate.beta, "y":e.rotationRate.gamma, "z":e.rotationRate.alpha}
 		
 		var now = new Date().getTime();
 		s.time = now;
