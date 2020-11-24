@@ -1,94 +1,79 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
     <title>Hello, world!</title>
 	<style>
+html,body{
+  width: 100%;
+  height: 100%;
+}
 
 .container{
-    padding:0;
-    background-color:#e4e4e4;
-	box-shadow: 0px -5px 5px #888888;
-	height:50%;
+   width:100%;
+   height:100%;
 }
 
-output {
-	display: block;
 
-
-	height: 45%;
-	width:100%;
-	overflow:auto;
-
-}
 
 
 
 </style>
   </head>
   <body>
-<output id="o" class="fixed-top"></output>
-<div class="container fixed-bottom rounded" id="pwd-container">
+<div class="container" id="pwd-container">
   
 
 </div>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 	
 <script>
+    lastMotionUpdateTime = 0;
+	lastOrientationUpdateTime = 0;
+
 	window.addEventListener('load', function() {
-	var events = [
-	'MSPointerDown',
-	'MSPointerUp',
-	'MSPointerCancel',
-	'MSPointerMove',
-	'MSPointerOver',
-	'MSPointerOut',
-	'MSPointerEnter',
-	'MSPointerLeave',
-	'MSGotPointerCapture',
-	'MSLostPointerCapture',
-	'pointerdown',
-	'pointerup',
-	'pointercancel',
-	'pointermove',
-	'pointerover',
-	'pointerout',
-	'pointerenter',
-	'pointerleave',
-	'gotpointercapture',
-	'lostpointercapture',
-	'touchstart',
-	'touchmove',
-	'touchend',
-	'touchenter',
-	'touchleave',
-	'touchcancel',
-	'mouseover',
-	'mousemove',
-	'mouseout',
-	'mouseenter',
-	'mouseleave',
-	'mousedown',
-	'mouseup',
-	'focus',
-	'blur',
-	'click',
-	'webkitmouseforcewillbegin',
-	'webkitmouseforcedown',
-	'webkitmouseforceup',
-	'webkitmouseforcechanged'
-	];
+            var events = [
+                // 'MSPointerDown',
+                // 'MSPointerUp',
+                // 'MSPointerCancel',
+                // 'MSPointerMove',
+                // 'MSPointerOver',
+                // 'MSPointerOut',
+                // 'MSPointerEnter',
+                // 'MSPointerLeave',
+                // 'MSGotPointerCapture',
+                // 'MSLostPointerCapture',
+                // 'pointerdown',
+                // 'pointerup',
+                // 'pointercancel',
+                // 'pointermove',
+                // 'pointerover',
+                // 'pointerout',
+                // 'pointerenter',
+                // 'pointerleave',
+                // 'gotpointercapture',
+                // 'lostpointercapture',
+                'touchstart',
+                'touchmove',
+                'touchend',
+                'touchenter',
+                'touchleave',
+                'touchcancel',
+                // 'mouseover',
+                // 'mousemove',
+                // 'mouseout',
+                // 'mouseenter',
+                // 'mouseleave',
+                // 'mousedown',
+                // 'mouseup',
+                // 'focus',
+                // 'blur',
+                // 'click',
+                // 'webkitmouseforcewillbegin',
+                // 'webkitmouseforcedown',
+                // 'webkitmouseforceup',
+                // 'webkitmouseforcechanged'
+            ];
 	var b = document.getElementById('pwd-container');
 	var o = document.getElementById('o');
 	
@@ -153,15 +138,14 @@ output {
 
 		
 		
-		setTimeout(function() { delayedInnerHTML(s) }, 100);
+		output(s);
 	}
 	
 	
 
 	/* Hack to work around new iOS8 behavior where innerHTML counts as a content change - previously, it was safe to use, see http://www.quirksmode.org/blog/archives/2014/02/the_ios_event_c.html */
-	delayedInnerHTML = function(s) {
-		o.innerHTML += JSON.stringify(s);
-		o.scrollTop = o.scrollHeight - o.clientHeight;
+	output = function(s) {
+		console.log(JSON.stringify(s))
 	}
 
 	for (var i=0; i<events.length; i++) {
@@ -188,7 +172,10 @@ output {
 		var now = new Date().getTime();
 		s.time = now;
 		
-		setTimeout(function() { delayedInnerHTML(s) }, 100);
+	    if (lastOrientationUpdateTime == 0 || (s.time - lastOrientationUpdateTime > 1000)) {
+		    output(s);
+			lastOrientationUpdateTime = s.time;
+		}
 	}
 	
 	if ('DeviceMotionEvent' in window) {
@@ -207,7 +194,10 @@ output {
 		var now = new Date().getTime();
 		s.time = now;
 		
-		setTimeout(function() { delayedInnerHTML(s) }, 100);
+	    if (lastMotionUpdateTime == 0 || (s.time - lastMotionUpdateTime > 1000)) {
+		    output(s);
+			lastMotionUpdateTime = s.time;
+		}
 	}
 </script>
   </body>
