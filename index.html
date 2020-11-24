@@ -85,21 +85,16 @@ html,body{
 		if ((typeof(e.targetTouches) != 'undefined') && (e.targetTouches.length > 0) && (typeof(e.targetTouches[0].force) != 'undefined')) {
 			s.force = e.targetTouches[0].force;
 		    
-			points = []
-			touchPoints = []
+			point = e.targetTouches[0];
+			
 			// radius and angle
-		    for (var i = 0, l = e.targetTouches.length; i<l; i++) {
-	        	points.push(e.targetTouches[i]);
-	        }
-	        for (var i = 0, l = points.length; i<l; i++) {
-	        	touchPoint = {}
-				touchPoint.id = i;
-				touchPoint.rotationAngle = points[i].rotationAngle || 0;
-		        touchPoint.radiusX = points[i].radiusX || 40;
-		        touchPoint.radiusY = points[i].radiusY || 40;
-				touchPoints.push(touchPoint);
-	        }
-			s.touchPoints = touchPoints;
+
+           	touchPoint = {}
+			touchPoint.rotationAngle = point.rotationAngle || 0;
+	        touchPoint.radiusX = point.radiusX || 40;
+	        touchPoint.radiusY = point.radiusY || 40;
+
+			s.touchPoint = touchPoint;
 		
 		
 		} else if (typeof(e.webkitForce) != 'undefined') {
