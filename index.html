@@ -178,7 +178,7 @@ body
 		s.time = now;
 		
 	    if (lastOrientationUpdateTime == 0 || (s.time - lastOrientationUpdateTime > 1000)) {
-		    output(s);
+		    // output(s);
 			lastOrientationUpdateTime = s.time;
 		}
 	}
@@ -200,7 +200,7 @@ body
 		s.time = now;
 		
 	    if (lastMotionUpdateTime == 0 || (s.time - lastMotionUpdateTime > 1000)) {
-		    output(s);
+		    // output(s);
 			lastMotionUpdateTime = s.time;
 		}
 	}
