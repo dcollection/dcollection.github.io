@@ -1,94 +1,39 @@
 <!doctype html>
 <html lang="zh-CN">
   <head>
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0, user-scalable=0">
-    <meta name="apple-mobile-web-app-capable" content="yes" /> 
-	<meta name="mobile-web-app-capable" content="yes">
-
-    <title>Hello, world!</title>
-	<style>
-html,body{
-  width: 100%;
-  height: 100%;
-  margin:0;
-}
-
-body
-{
-    background: url('background.jpg')top center no-repeat; 
-    background-size:cover;
-}
-
-.container{
-   width:100%;
-   height:100%;
-}
-
-
-
-
-
-</style>
+    <title>demo</title>
   </head>
-  <body>
-<div class="container" id="pwd-container">
-  
-
-</div>
-
-	
+<body>
 <script>
-    lastMotionUpdateTime = 0;
-	lastOrientationUpdateTime = 0;
-
-	window.addEventListener('load', function() {
-            var events = [
-                // 'MSPointerDown',
-                // 'MSPointerUp',
-                // 'MSPointerCancel',
-                // 'MSPointerMove',
-                // 'MSPointerOver',
-                // 'MSPointerOut',
-                // 'MSPointerEnter',
-                // 'MSPointerLeave',
-                // 'MSGotPointerCapture',
-                // 'MSLostPointerCapture',
-                // 'pointerdown',
-                // 'pointerup',
-                // 'pointercancel',
-                // 'pointermove',
-                // 'pointerover',
-                // 'pointerout',
-                // 'pointerenter',
-                // 'pointerleave',
-                // 'gotpointercapture',
-                // 'lostpointercapture',
+    var lastMotionUpdateTime = 0;
+	var lastOrientationUpdateTime = 0;
+	window.addEventListener('load', bindTouchEvents, true);
+    if ('DeviceOrientationEvent' in window) {
+        window.addEventListener('deviceorientation', deviceOrientationHandler, true);
+    }
+	if ('DeviceMotionEvent' in window) {
+        window.addEventListener('devicemotion', handleMotion, true);
+    }
+	
+	function output(s) {
+		console.log(JSON.stringify(s))
+	}
+	
+	function bindTouchEvents() {
+        var events = [
                 'touchstart',
                 'touchmove',
                 'touchend',
                 'touchenter',
                 'touchleave',
                 'touchcancel',
-                // 'mouseover',
-                // 'mousemove',
-                // 'mouseout',
-                // 'mouseenter',
-                // 'mouseleave',
-                // 'mousedown',
-                // 'mouseup',
-                // 'focus',
-                // 'blur',
-                // 'click',
-                // 'webkitmouseforcewillbegin',
-                // 'webkitmouseforcedown',
-                // 'webkitmouseforceup',
-                // 'webkitmouseforcechanged'
-            ];
-	var b = document.getElementById('pwd-container');
-	var o = document.getElementById('o');
-	
+        ];
+	    for (var i=0; i<events.length; i++) {
+	    	window.addEventListener(events[i], touchEventsHandler, true);
+	    }
+	}
 
-	report = function(e) {
+	function touchEventsHandler(e) {
 		// force
 		var s = {};
 		s.type = e.type;
@@ -98,15 +43,13 @@ body
 			point = e.targetTouches[0];
 			
 			// radius and angle
-
            	touchPoint = {}
 			touchPoint.rotationAngle = point.rotationAngle || 0;
 	        touchPoint.radiusX = point.radiusX || 40;
 	        touchPoint.radiusY = point.radiusY || 40;
 
 			s.touchPoint = touchPoint;
-		
-		
+
 		} else if (typeof(e.webkitForce) != 'undefined') {
 			s.force = e.webkitForce;
 		} else if (typeof(e.pressure) != 'undefined') {
@@ -133,38 +76,12 @@ body
 			s.position = p;
 		}
 		
-		// time
-		// the number of milliseconds since midnight, January 1, 1970.
-		/* Hack - would normally use e.timeStamp but it's whack in Fx/Android
-		   As a result, the timings will be slightly inflated due to processing*/
 		var now = new Date().getTime();
 		s.time = now;
-		
-
-		
-		
 		output(s);
-	}
-	
-	
-
-	/* Hack to work around new iOS8 behavior where innerHTML counts as a content change - previously, it was safe to use, see http://www.quirksmode.org/blog/archives/2014/02/the_ios_event_c.html */
-	output = function(s) {
-		console.log(JSON.stringify(s))
+		
 	}
 
-	for (var i=0; i<events.length; i++) {
-		b.addEventListener(events[i], report, false);
-	}
-	
-	
-    }, true);
-
-
-    if ('DeviceOrientationEvent' in window) {
-        window.addEventListener('deviceorientation', deviceOrientationHandler, false);
-    }
-	
 	function deviceOrientationHandler (e) {
 		var s = {}
 		
@@ -178,14 +95,10 @@ body
 		s.time = now;
 		
 	    if (lastOrientationUpdateTime == 0 || (s.time - lastOrientationUpdateTime > 1000)) {
-		    // output(s);
+		    output(s);
 			lastOrientationUpdateTime = s.time;
 		}
 	}
-	
-	if ('DeviceMotionEvent' in window) {
-        window.addEventListener('devicemotion', handleMotion, false);
-    }
 	
 	function handleMotion (e) {
 		var s = {}
@@ -200,10 +113,10 @@ body
 		s.time = now;
 		
 	    if (lastMotionUpdateTime == 0 || (s.time - lastMotionUpdateTime > 1000)) {
-		    // output(s);
+		    output(s);
 			lastMotionUpdateTime = s.time;
 		}
 	}
 </script>
-  </body>
+</body>
 </html>
